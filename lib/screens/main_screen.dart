@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fooddedliveryapp/screens/carts.dart';
-import 'package:fooddedliveryapp/screens/favourites.dart';
+import 'package:fooddedliveryapp/screens/explore.dart';
 import 'package:fooddedliveryapp/screens/home.dart';
 import 'package:fooddedliveryapp/screens/profile.dart';
 
@@ -13,8 +13,8 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> pages = [
     Home(),
+    Explore(),
     Carts(),
-    Favourties(),
     Profile()
   ];
 
@@ -42,12 +42,12 @@ class _MainScreenState extends State<MainScreen> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            title: Text('Carts'),
+              icon: Icon(Icons.explore),
+              title: Text('Explore')
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite_border),
-            title: Text('Favourites')
+            icon: Icon(Icons.shopping_cart),
+            title: Text('Carts'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

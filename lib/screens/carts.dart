@@ -9,8 +9,8 @@ import 'package:fooddedliveryapp/utils/reuseable_widget.dart';
 class Carts extends StatelessWidget {
 
   List<Food> _cartList = [
-    Food(image: 'assets/images/b.jpg', name: 'Burger', price: 23.30, star: 2, time: 2),
-    Food(image: 'assets/images/burger-img.jpg', name: 'Burger', price: 23.30, star: 2, time: 2),
+    Food(image: 'assets/images/b.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: ''),
+    Food(image: 'assets/images/burger-img.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: ''),
   ];
 
   @override

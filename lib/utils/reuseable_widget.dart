@@ -349,3 +349,32 @@ class _CartFoodCardState extends State<CartFoodCard> {
     );
   }
 }
+
+class BorderedButton extends StatelessWidget {
+  BorderedButton({@required this.onTap, @required this.labelText});
+
+  final String labelText;
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(color: Colors.blue, width: 3),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+          child: Text(
+            '$labelText',
+            style: TextStyle(
+                fontWeight: FontWeight.w500
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
