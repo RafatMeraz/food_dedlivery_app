@@ -84,6 +84,15 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          '+8801793785741',
+                          style: TextStyle(
+                            color: Colors.black54
+                          ),
+                        ),
+                        SizedBox(
                           height: 10,
                         ),
                         BorderedButton(
