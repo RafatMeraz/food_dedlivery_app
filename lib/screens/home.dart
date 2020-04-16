@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooddedliveryapp/models/food.dart';
+import 'package:fooddedliveryapp/network/connection.dart';
 import '../utils/reuseable_widget.dart';
 
 class Home extends StatefulWidget {
@@ -9,6 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Connection connection = Connection();
 
   final themeTextStyle =  TextStyle(
       fontSize: 30,
@@ -21,6 +23,17 @@ class _HomeState extends State<Home> {
     Food(image: 'assets/images/b.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: ''),
     Food(image: 'assets/images/b.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: ''),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    networkTask();
+  }
+
+  networkTask()async {
+    await connection.getConnection();
+  }
 
   @override
   Widget build(BuildContext context) {

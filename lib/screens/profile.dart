@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fooddedliveryapp/screens/edit_profile.dart';
 import 'package:fooddedliveryapp/utils/reuseable_widget.dart';
 
 class Profile extends StatefulWidget {
@@ -96,7 +97,11 @@ class _ProfileState extends State<Profile> {
                           height: 10,
                         ),
                         BorderedButton(
-                          onTap: (){},
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context)=> EditProfile()
+                            ));
+                          },
                           labelText: 'Edit',
                         )
                       ],
