@@ -44,21 +44,24 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 Stack(
                   children: <Widget>[
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/user.jpg'),
-                              fit: BoxFit.cover
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 3
-                            )
-                          ]
+                    Hero(
+                      tag: 'profile-img',
+                      child: Container(
+                        width: 150,
+                        height: 150,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/user.jpg'),
+                                fit: BoxFit.cover
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 3
+                              )
+                            ]
+                        ),
                       ),
                     ),
                     Positioned(

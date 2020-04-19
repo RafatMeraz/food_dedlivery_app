@@ -10,7 +10,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Connection connection = Connection();
 
   final themeTextStyle =  TextStyle(
       fontSize: 30,
@@ -32,7 +31,7 @@ class _HomeState extends State<Home> {
   }
 
   networkTask()async {
-    await connection.getConnection();
+
   }
 
   @override

@@ -45,21 +45,24 @@ class _ProfileState extends State<Profile> {
                 ),
                 Row(
                   children: <Widget>[
-                    Container(
-                      width: 100,
-                      height: 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/user.jpg'),
-                          fit: BoxFit.cover
+                    Hero(
+                      tag: 'profile-img',
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/user.jpg'),
+                            fit: BoxFit.cover
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 3
+                            )
+                          ]
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 3
-                          )
-                        ]
                       ),
                     ),
                     SizedBox(

@@ -165,16 +165,17 @@ class MenuCard extends StatelessWidget {
 }
 
 class InputTextField extends StatelessWidget {
-  InputTextField({@required this.hint, @required this.suffixIcon, @required this.obscureText});
+  InputTextField({@required this.hint, @required this.suffixIcon, @required this.obscureText, @required this.controller});
 
   final String hint;
   final IconData suffixIcon;
   final bool obscureText;
-
+  final TextEditingController controller;
   @override
   Widget build(BuildContext context) {
     return TextField(
       obscureText: obscureText,
+      controller: controller,
       decoration: InputDecoration(
           prefixIcon: Icon(suffixIcon, color: Colors.black87,),
           hintText: '$hint',
