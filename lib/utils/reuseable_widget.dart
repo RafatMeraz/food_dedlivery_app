@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import '../models/food.dart';
 
 class FoodItemCard extends StatelessWidget {
-  FoodItemCard({@required this.foodName, @required this.image, @required this.time, @required this.price, @required this.star});
+  FoodItemCard({@required this.foodName, @required this.image, @required this.price});
 
   final String foodName;
   final double price;
-  final int time;
-  final int star;
   final String image;
 
   @override
@@ -99,12 +97,12 @@ class FoodItemCard extends StatelessWidget {
                             fontWeight: FontWeight.w700
                         ),
                       ),
-                      Text(
-                        '$time Min to Ready',
-                        style: TextStyle(
-                            color: Colors.white
-                        ),
-                      )
+//                      Text(
+//                        '$time Min to Ready',
+//                        style: TextStyle(
+//                            color: Colors.white
+//                        ),
+//                      )
                     ],
                   )
                 ],
@@ -322,12 +320,12 @@ class _CartFoodCardState extends State<CartFoodCard> {
                         color: Colors.yellow[800]
                     )
                 ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                    '${widget.food.time} Min to Ready'
-                ),
+//                SizedBox(
+//                  height: 5,
+//                ),
+//                Text(
+//                    '${widget.food.time} Min to Ready'
+//                ),
               ],
             ),
             Spacer(),

@@ -24,7 +24,6 @@ class _RegisterState extends State<Register> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _emailController = TextEditingController();
     _phoneController = TextEditingController();
@@ -37,7 +36,6 @@ class _RegisterState extends State<Register> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _emailController.dispose();
     _phoneController.dispose();
     _fullNameController.dispose();

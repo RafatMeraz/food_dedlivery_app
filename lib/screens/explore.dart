@@ -8,10 +8,7 @@ import 'package:fooddedliveryapp/utils/reuseable_widget.dart';
 
 class Explore extends StatelessWidget {
 
-  List<Food> _cartList = [
-    Food(image: 'assets/images/b.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: 'This is simple description of this food item'),
-    Food(image: 'assets/images/burger-img.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: 'Burger with exy.'),
-  ];
+  List<Food> _cartList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +109,13 @@ class FoodDetailsCard extends StatelessWidget {
                 SizedBox(
                   height: 5,
                 ),
-                Text(
-                  '${food.time} to ready',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 15
-                  ),
-                ),
+//                Text(
+//                  '${food.time} to ready',
+//                  style: TextStyle(
+//                    fontWeight: FontWeight.w500,
+//                    fontSize: 15
+//                  ),
+//                ),
                 SizedBox(
                   height: 10,
                 ),

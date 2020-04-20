@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooddedliveryapp/models/food.dart';
+import 'package:fooddedliveryapp/models/menu.dart';
 import 'package:fooddedliveryapp/network/connection.dart';
 import '../utils/reuseable_widget.dart';
 
@@ -10,28 +11,56 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Connection _connection;
+  List<Menu> menus = [];
+  List<Menu> allMenus = [];
+  List<Food> foods = [];
+  List<Food> allFoods = [];
 
   final themeTextStyle =  TextStyle(
       fontSize: 30,
       fontWeight: FontWeight.bold
   );
 
-  List<Food> _foodList = [
-    Food(image: 'assets/images/b.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: ''),
-    Food(image: 'assets/images/burger-img.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: ''),
-    Food(image: 'assets/images/b.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: ''),
-    Food(image: 'assets/images/b.jpg', name: 'Burger', price: 23.30, star: 2, time: 2, description: ''),
-  ];
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    networkTask();
+    _connection = Connection(this.context);
+    getMenus();
+    getFoods();
   }
 
-  networkTask()async {
+  getMenus() async{
+    menus.clear();
+    var response = await _connection.getMenus();
+    print(response);
+    for (int i=0; i<response.length; i++){
+      menus.add(Menu(id: response[i]['id'], name: response[i]['name'], image: response[i]['image']));
+    }
+    setState(() {
+      allMenus = menus;
+    });
+  }
 
+  getFoods() async{
+    foods.clear();
+    var response = await _connection.getFoods();
+    print(response);
+    for (int i=0; i<response.length; i++){
+      foods.add(
+          Food(
+              id: response[i]['id'],
+              name: response[i]['name'],
+              image: response[i]['image'],
+              description: response[i]['description'],
+              menuId: response[i]['menu_id'],
+              price: response[i]['price']
+          )
+      );
+    }
+    setState(() {
+      allFoods = foods;
+    });
   }
 
   @override
@@ -64,7 +93,6 @@ class _HomeState extends State<Home> {
                 ],
               ),
             );
-
     // Menu Items Sections
     final menuItems = Container(
       width: double.infinity,
@@ -72,29 +100,14 @@ class _HomeState extends State<Home> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: <Widget>[
-            MenuCard(
-              menuName: 'Burgers',
-              image: 'assets/images/burger.png',
-              kinds: '11 Kinds',
-            ),
-            MenuCard(
-              menuName: 'Pizza',
-              image: 'assets/images/pizza.png',
-              kinds: '7 Kinds',
-            ),
-            MenuCard(
-              menuName: 'Soup',
-              image: 'assets/images/soup.png',
-              kinds: '6 Kinds',
-            ),
-            MenuCard(
-              menuName: 'Chicken',
-              image: 'assets/images/chicken.png',
-              kinds: '75 Kinds',
-            ),
-          ],
-        ),
+          children: allMenus.map((menu){
+            return MenuCard(
+              image: menu.image,
+              kinds: "12",
+              menuName: menu.name,
+            );
+          }).toList()
+          ),
       ),
     );
 
@@ -155,13 +168,11 @@ class _HomeState extends State<Home> {
     );
 
     final foodListView = Column(
-      children: _foodList.map((food){
+      children: allFoods.map((food){
         return FoodItemCard(
             foodName: food.name,
             image: food.image,
-            time: food.time,
             price: food.price,
-            star: food.star
         );
       }).toList(),
     );
