@@ -3,25 +3,59 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooddedliveryapp/models/food.dart';
+import 'package:fooddedliveryapp/network/connection.dart';
 import 'package:fooddedliveryapp/screens/login.dart';
 import 'package:fooddedliveryapp/utils/reuseable_widget.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import '../utils/contrraints.dart';
 
-class Explore extends StatelessWidget {
+class Explore extends StatefulWidget {
 
-  List<Food> _cartList = [];
+  @override
+  _ExploreState createState() => _ExploreState();
+}
+
+class _ExploreState extends State<Explore> {
+  List<Food> _foods = [];
+  List<Food> _allFoods = [];
+  Connection _connection;
+  bool showProgress = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _connection = Connection(this.context);
+    getFoods();
+  }
+
+  getFoods() async{
+    setState(() {
+      showProgress = true;
+    });
+    var _response = await _connection.getFoods();
+    _foods.clear();
+    for (int i=0; i<_response.length; i++){
+      _foods.add(
+          Food(
+              id: _response[i]['id'],
+              name: _response[i]['name'],
+              image: _response[i]['image'],
+              description: _response[i]['description'],
+              menuId: _response[i]['menu_id'],
+              price: _response[i]['price'],
+              time: _response[i]['time']
+          )
+      );
+    }
+    setState(() {
+      _allFoods = _foods;
+      showProgress = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    final cartsList = Column(
-        children: _cartList.map((f){
-          return CartFoodCard(
-              food:f
-          );
-        }).toList()
-    );
-
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -35,115 +69,19 @@ class Explore extends StatelessWidget {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Column(
-                children: <Widget>[
-                  FoodDetailsCard(
-                    food: _cartList[0],
-                  ),
-                  FoodDetailsCard(
-                    food: _cartList[1],
-                  )
-                ],
-              ),
-            )
+        body: ModalProgressHUD(
+          inAsyncCall: showProgress,
+          child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: Column(
+                  children: _allFoods.map((food){
+                    return FoodDetailsCard(food: food);
+                  }).toList()
+                ),
+              )
+          ),
         )
-    );
-  }
-}
-
-class FoodDetailsCard extends StatelessWidget {
-  FoodDetailsCard({@required this.food});
-
-  final Food food;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      child: Container(
-        padding: EdgeInsets.all(16),
-        child: Row(
-          children: <Widget>[
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  image: AssetImage('${food.image}'),
-                  fit: BoxFit.cover
-                )
-              ),
-            ),
-            SizedBox(
-              width: 15,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  '${food.name}',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  width: 230,
-                  child: Text(
-                    '${food.description}',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 5,
-                    style: TextStyle(
-                      color: Colors.black54
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-//                Text(
-//                  '${food.time} to ready',
-//                  style: TextStyle(
-//                    fontWeight: FontWeight.w500,
-//                    fontSize: 15
-//                  ),
-//                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  width: 230,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        '\$${food.price}',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.yellow[800]
-                        ),
-                      ),
-                      BorderedButton(
-                        labelText: 'Buy',
-                        onTap: (){},
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
     );
   }
 }

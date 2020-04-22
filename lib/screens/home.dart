@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fooddedliveryapp/models/food.dart';
 import 'package:fooddedliveryapp/models/menu.dart';
 import 'package:fooddedliveryapp/network/connection.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import '../utils/reuseable_widget.dart';
 
 class Home extends StatefulWidget {
@@ -16,6 +17,7 @@ class _HomeState extends State<Home> {
   List<Menu> allMenus = [];
   List<Food> foods = [];
   List<Food> allFoods = [];
+  bool showProgress = false;
 
   final themeTextStyle =  TextStyle(
       fontSize: 30,
@@ -31,6 +33,9 @@ class _HomeState extends State<Home> {
   }
 
   getMenus() async{
+    setState(() {
+      showProgress = true;
+    });
     menus.clear();
     var response = await _connection.getMenus();
     print(response);
@@ -61,6 +66,7 @@ class _HomeState extends State<Home> {
     }
     setState(() {
       allFoods = foods;
+      showProgress = false;
     });
   }
 
@@ -111,7 +117,6 @@ class _HomeState extends State<Home> {
           ),
       ),
     );
-
     // Search bar section
     final searchBar = Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
@@ -140,7 +145,7 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-
+    // text label with button
     final textLabelWidget = Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -167,7 +172,7 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-
+    // Frequently buy foods
     final foodListView = Column(
       children: allFoods.map((food){
         return FoodItemCard(
@@ -180,18 +185,21 @@ class _HomeState extends State<Home> {
     );
 
     return SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              mainThemeText,
-              menuItems,
-              searchBar,
-              SizedBox(
-                height: 20,
-              ),
-              textLabelWidget,
-              foodListView,
-            ],
+        child: ModalProgressHUD(
+          inAsyncCall: showProgress,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                mainThemeText,
+                menuItems,
+                searchBar,
+                SizedBox(
+                  height: 20,
+                ),
+                textLabelWidget,
+                foodListView,
+              ],
+            ),
           ),
         ),
     );

@@ -227,6 +227,100 @@ class RoundButton extends StatelessWidget {
   }
 }
 
+class FoodDetailsCard extends StatelessWidget {
+  FoodDetailsCard({@required this.food});
+
+  final Food food;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 3,
+      child: Container(
+        padding: EdgeInsets.all(16),
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                      image: NetworkImage('${Constraints.baseURL+food.image}'),
+                      fit: BoxFit.cover
+                  )
+              ),
+            ),
+            SizedBox(
+              width: 15,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  '${food.name}',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500
+                  ),
+                ),
+//                SizedBox(
+//                  height: 5,
+//                ),
+//                Container(
+//                  width: MediaQuery.of(context).size.width - 190,
+//                  child: Text(
+//                    '${food.description}',
+//                    overflow: TextOverflow.ellipsis,
+//                    maxLines: 5,
+//                    style: TextStyle(
+//                        color: Colors.black54
+//                    ),
+//                  ),
+//                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  '${food.time} mins to ready',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width - 190,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        '\$${food.price}',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.yellow[800]
+                        ),
+                      ),
+                      OutlineButton(
+                        child: Text('Buy'),
+                        borderSide: BorderSide(
+                            color: Colors.blueAccent,
+                          width: 2
+                        ),
+                        onPressed: (){},
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class CartFoodCard extends StatefulWidget {
   CartFoodCard({@required this.food});
