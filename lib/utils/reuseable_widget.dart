@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import '../models/food.dart';
+import 'contrraints.dart';
 
 class FoodItemCard extends StatelessWidget {
-  FoodItemCard({@required this.foodName, @required this.image, @required this.price});
+  FoodItemCard({@required this.foodName, @required this.image, @required this.price, @required this.time});
 
   final String foodName;
-  final double price;
+  final int price;
   final String image;
-
+  final int time;
+  Constraints constraints = Constraints();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +23,7 @@ class FoodItemCard extends StatelessWidget {
               height: 200,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage('$image'),
+                      image: NetworkImage('${Constraints.baseURL+ image}'),
                       fit: BoxFit.cover
                   )
               ),
@@ -97,12 +99,12 @@ class FoodItemCard extends StatelessWidget {
                             fontWeight: FontWeight.w700
                         ),
                       ),
-//                      Text(
-//                        '$time Min to Ready',
-//                        style: TextStyle(
-//                            color: Colors.white
-//                        ),
-//                      )
+                      Text(
+                        '$time Min to Ready',
+                        style: TextStyle(
+                            color: Colors.white
+                        ),
+                      )
                     ],
                   )
                 ],
@@ -133,7 +135,7 @@ class MenuCard extends StatelessWidget {
             Container(
                 width: 100,
                 height: 80,
-                child: Image.asset('$image')
+                child: Image.network('${Constraints.baseURL+ image}')
             ),
             SizedBox(
               width: 10,

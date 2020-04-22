@@ -117,6 +117,7 @@ class _LoginState extends State<Login> {
                                                 color: Colors.white));
                                       } else {
                                         final SharedPreferences prefs = await _prefs;
+                                        await prefs.setInt('id', _response['id']);
                                         await prefs.setString(
                                             'api_token',
                                             _response['api_token']).then((bool success){

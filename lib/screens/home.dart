@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
     var response = await _connection.getMenus();
     print(response);
     for (int i=0; i<response.length; i++){
-      menus.add(Menu(id: response[i]['id'], name: response[i]['name'], image: response[i]['image']));
+      menus.add(Menu(id: response[i]['id'], name: response[i]['name'], image: response[i]['image'], items: response[i]['items']));
     }
     setState(() {
       allMenus = menus;
@@ -43,9 +43,9 @@ class _HomeState extends State<Home> {
   }
 
   getFoods() async{
-    foods.clear();
     var response = await _connection.getFoods();
     print(response);
+    foods.clear();
     for (int i=0; i<response.length; i++){
       foods.add(
           Food(
@@ -54,7 +54,8 @@ class _HomeState extends State<Home> {
               image: response[i]['image'],
               description: response[i]['description'],
               menuId: response[i]['menu_id'],
-              price: response[i]['price']
+              price: response[i]['price'],
+              time: response[i]['time']
           )
       );
     }
@@ -103,7 +104,7 @@ class _HomeState extends State<Home> {
           children: allMenus.map((menu){
             return MenuCard(
               image: menu.image,
-              kinds: "12",
+              kinds: "${menu.items} items",
               menuName: menu.name,
             );
           }).toList()
@@ -173,6 +174,7 @@ class _HomeState extends State<Home> {
             foodName: food.name,
             image: food.image,
             price: food.price,
+            time: food.time,
         );
       }).toList(),
     );

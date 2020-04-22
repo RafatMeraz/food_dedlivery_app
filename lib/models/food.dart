@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 class Food{
   final int id;
-  final int menuId;
+  final int menuId, time;
   final String name, image, description;
-  final double price;
+  final int price;
 
   Food({
     @required this.id,
@@ -12,6 +12,7 @@ class Food{
     @required this.image,
     @required this.menuId,
     @required this.price,
-    @required this.description
+    @required this.description,
+    @required this.time
   });
 }

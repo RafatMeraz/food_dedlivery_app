@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fooddedliveryapp/screens/edit_profile.dart';
+import 'package:fooddedliveryapp/screens/login.dart';
 import 'package:fooddedliveryapp/utils/reuseable_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -8,6 +10,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool appNotification = true;
 
   bool locationTracing = false;
@@ -36,7 +39,13 @@ class _ProfileState extends State<Profile> {
                       icon: Icon(
                         Icons.exit_to_app
                       ),
-                      onPressed: (){},
+                      onPressed: () async{
+                        final SharedPreferences prefs = await _prefs;
+                        prefs.clear();
+                        Navigator.pushReplacement(context, MaterialPageRoute(
+                            builder: (BuildContext context) => Login()
+                        ));
+                      },
                     )
                   ],
                 ),
