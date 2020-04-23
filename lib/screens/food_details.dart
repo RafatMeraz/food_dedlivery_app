@@ -1,6 +1,8 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooddedliveryapp/models/food.dart';
+import 'package:fooddedliveryapp/network/connection.dart';
 import 'package:fooddedliveryapp/utils/contrraints.dart';
 
 class FoodDetails extends StatefulWidget {
@@ -13,6 +15,9 @@ class FoodDetails extends StatefulWidget {
 }
 
 class _FoodDetailsState extends State<FoodDetails> {
+
+  bool isProcessing = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,20 +149,41 @@ class _FoodDetailsState extends State<FoodDetails> {
                 ],
               ),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              alignment: Alignment.center,
-              color: Colors.blueAccent,
-              child: Text(
-                'Add to Carts',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: .5
+            InkWell(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 60,
+                alignment: Alignment.center,
+                color: Colors.blueAccent,
+                child: isProcessing ? CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                ) : Text(
+                  'Add to Carts',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: .5
+                  ),
                 ),
               ),
+              onTap: () async{
+                setState(() {
+                  isProcessing = true;
+                });
+                Connection _connection = Connection(context);
+                var _response = await _connection.addToCart(widget.food.id);
+                BotToast.showText(
+                    text: _response['status'],
+                    contentColor: _response['error'] ? Colors.red : Colors.green,
+                    textStyle: TextStyle(
+                        color: Colors.white
+                    )
+                );
+                setState(() {
+                  isProcessing = false;
+                });
+              },
             )
           ],
         ),
