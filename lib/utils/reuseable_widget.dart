@@ -1,117 +1,126 @@
+import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fooddedliveryapp/network/connection.dart';
 import 'package:fooddedliveryapp/screens/food_details.dart';
+import 'package:progress_indicator_button/progress_button.dart';
 import '../models/food.dart';
 import 'contrraints.dart';
 
 class FoodItemCard extends StatelessWidget {
-  FoodItemCard({@required this.foodName, @required this.image, @required this.price, @required this.time});
+  FoodItemCard({@required this.food});
 
-  final String foodName;
-  final int price;
-  final String image;
-  final int time;
+  final Food food;
   Constraints constraints = Constraints();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Stack(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage('${Constraints.baseURL+ image}'),
-                      fit: BoxFit.cover
-                  )
+    return InkWell(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(
+          builder: (BuildContext context)=> FoodDetails(food: food)
+        ));
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: NetworkImage('${Constraints.baseURL+ food.image}'),
+                        fit: BoxFit.cover
+                    )
+                ),
               ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              right: 0.0,
-              child: Opacity(
-                opacity: 0.4,
-                child: Container(
-                  width: double.infinity,
-                  height: 60,
-                  decoration: BoxDecoration(
-                      color: Colors.black87
+              Positioned(
+                bottom: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: Opacity(
+                  opacity: 0.4,
+                  child: Container(
+                    width: double.infinity,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: Colors.black87
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              left: 10.0,
-              bottom: 10.0,
-              right: 10.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '$foodName',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontSize: 16
+              Positioned(
+                left: 10.0,
+                bottom: 10.0,
+                right: 10.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '${food.name}',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                              fontSize: 16
+                          ),
                         ),
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      )
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                            ),
+                            Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                            ),
+                            Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                            ),
+                            Icon(
+                              Icons.star,
+                              color: Colors.yellow,
+                            ),
+                            Icon(
+                              Icons.star,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        )
 
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        '\$$price',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text(
+                          '\$${food.price}',
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700
+                          ),
                         ),
-                      ),
-                      Text(
-                        '$time Min to Ready',
-                        style: TextStyle(
-                            color: Colors.white
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
+                        Text(
+                          '${food.time} Min to Ready',
+                          style: TextStyle(
+                              color: Colors.white
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -309,13 +318,31 @@ class FoodDetailsCard extends StatelessWidget {
                               color: Colors.yellow[800]
                           ),
                         ),
-                        OutlineButton(
-                          child: Text('Buy'),
-                          borderSide: BorderSide(
-                              color: Colors.blueAccent,
-                            width: 2
+                        Container(
+                          width: 80,
+                          height: 35,
+                          child: ProgressButton(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Text(
+                              'Buy',
+                              style: TextStyle(
+                                color: Colors.white
+                              ),
+                            ),
+                            onPressed: (AnimationController _controller) async{
+                              _controller.forward();
+                              Connection _connection = Connection(context);
+                              var _response = await _connection.addToCart(food.id);
+                              BotToast.showText(
+                                  text: _response['status'],
+                                  contentColor: _response['error'] ? Colors.red : Colors.green,
+                                  textStyle: TextStyle(
+                                      color: Colors.white
+                                  )
+                              );
+                              _controller.reverse();
+                            },
                           ),
-                          onPressed: (){},
                         )
                       ],
                     ),

@@ -25,14 +25,17 @@ class _FoodDetailsState extends State<FoodDetails> {
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
-                      Container(
-                        height: 230,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(Constraints.baseURL+widget.food.image),
-                                fit: BoxFit.cover
-                            )
+                      Hero(
+                        tag: 'food-img',
+                        child: Container(
+                          height: 230,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: NetworkImage(Constraints.baseURL+widget.food.image),
+                                  fit: BoxFit.cover
+                              )
+                          ),
                         ),
                       ),
                       Align(

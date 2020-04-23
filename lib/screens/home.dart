@@ -176,10 +176,7 @@ class _HomeState extends State<Home> {
     final foodListView = Column(
       children: allFoods.map((food){
         return FoodItemCard(
-            foodName: food.name,
-            image: food.image,
-            price: food.price,
-            time: food.time,
+            food: food,
         );
       }).toList(),
     );

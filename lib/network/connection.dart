@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fooddedliveryapp/models/food.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -98,10 +99,38 @@ class Connection{
     }
   }
 
+  Future<dynamic> addToCart(int foodId) async{
+    try {
+      var token = await getAPIToken();
+      var userId = await getUserId();
+      print("$userId $foodId");
+      http.Response _response = await http.post(baseURL + '/addtocarts', body: {
+        'api_token': token,
+        'customer_id': "$userId",
+        'food_id': "$foodId"
+      });
+      if (_response.statusCode == 200) {
+        return jsonDecode(_response.body);
+      } else {
+        print(_response.statusCode);
+      }
+    } catch (e){
+      print(e);
+    }
+  }
+
   Future<String> getAPIToken() async{
     final SharedPreferences prefs = await _prefs;
     if (prefs.getString('api_token') != null){
       return prefs.getString('api_token');
+    } else {
+      return null;
+    }
+  }
+  Future<int> getUserId() async{
+    final SharedPreferences prefs = await _prefs;
+    if (prefs.getInt('id') != null){
+      return prefs.getInt('id');
     } else {
       return null;
     }
