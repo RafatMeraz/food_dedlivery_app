@@ -28,6 +28,11 @@ class _CartsState extends State<Carts> {
     getAllCarts();
   }
 
+  refresh(int id){
+    setState(() {
+      allCarts.removeWhere((cart)=> cart.id == id);
+    });
+  }
   getAllCarts() async{
     setState(() {
       showProgress = true;
@@ -64,7 +69,9 @@ class _CartsState extends State<Carts> {
     final cartsList = Column(
       children: allCarts.map((f){
         return CartFoodCard(
-            food: f.food
+            food: f.food,
+          cartId: f.id,
+          notifyParent: refresh,
         );
       }).toList()
     );
@@ -199,7 +206,7 @@ class _CartsState extends State<Carts> {
       ),
       body: ModalProgressHUD(
         inAsyncCall: showProgress,
-        child: SingleChildScrollView(
+        child: allCarts.isEmpty ? cartsBody : SingleChildScrollView(
             child: cartsBody
         ),
       )

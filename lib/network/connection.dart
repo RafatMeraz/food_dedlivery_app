@@ -144,6 +144,24 @@ class Connection{
     }
   }
 
+  // Delete from arts
+  Future<dynamic> deleteFromCarts(int id) async{
+    try{
+      var token = await getAPIToken();
+      http.Response _response = await http.post(baseURL+'/delteFromCarts', body: {
+        'api_token': token,
+        'cart_id': "$id"
+      });
+      if (_response.statusCode == 200){
+        return jsonDecode(_response.body);
+      } else {
+        print(_response.statusCode);
+      }
+    } catch(e){
+      print("Connection error : "+e);
+    }
+  }
+
   // get API token from sharedpreferences
   Future<String> getAPIToken() async{
     final SharedPreferences prefs = await _prefs;

@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooddedliveryapp/network/connection.dart';
+import 'package:fooddedliveryapp/screens/carts.dart';
 import 'package:fooddedliveryapp/screens/food_details.dart';
 import 'package:progress_indicator_button/progress_button.dart';
 import '../models/food.dart';
@@ -16,9 +17,9 @@ class FoodItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.push(context, MaterialPageRoute(
-          builder: (BuildContext context)=> FoodDetails(food: food)
+            builder: (BuildContext context) => FoodDetails(food: food)
         ));
       },
       child: Container(
@@ -32,7 +33,8 @@ class FoodItemCard extends StatelessWidget {
                 height: 200,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage('${Constraints.baseURL+ food.image}'),
+                        image: NetworkImage(
+                            '${Constraints.baseURL + food.image}'),
                         fit: BoxFit.cover
                     )
                 ),
@@ -128,7 +130,8 @@ class FoodItemCard extends StatelessWidget {
 }
 
 class MenuCard extends StatelessWidget {
-  MenuCard({@required this.image, @required this.menuName, @required this.kinds});
+  MenuCard(
+      {@required this.image, @required this.menuName, @required this.kinds});
 
   final String image;
   final String menuName;
@@ -145,7 +148,7 @@ class MenuCard extends StatelessWidget {
             Container(
                 width: 100,
                 height: 80,
-                child: Image.network('${Constraints.baseURL+ image}')
+                child: Image.network('${Constraints.baseURL + image}')
             ),
             SizedBox(
               width: 10,
@@ -175,12 +178,14 @@ class MenuCard extends StatelessWidget {
 }
 
 class InputTextField extends StatelessWidget {
-  InputTextField({@required this.hint, @required this.suffixIcon, @required this.obscureText, @required this.controller});
+  InputTextField(
+      {@required this.hint, @required this.suffixIcon, @required this.obscureText, @required this.controller});
 
   final String hint;
   final IconData suffixIcon;
   final bool obscureText;
   final TextEditingController controller;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -215,14 +220,14 @@ class RoundButton extends StatelessWidget {
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black87,
-              blurRadius: 2,
-            )
-          ]
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black87,
+                blurRadius: 2,
+              )
+            ]
         ),
         child: Text(
           '$labelText',
@@ -245,9 +250,9 @@ class FoodDetailsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.push(context, MaterialPageRoute(
-          builder: (BuildContext context) => FoodDetails(food: food)
+            builder: (BuildContext context) => FoodDetails(food: food)
         ));
       },
       child: Card(
@@ -262,7 +267,8 @@ class FoodDetailsCard extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
-                        image: NetworkImage('${Constraints.baseURL+food.image}'),
+                        image: NetworkImage(
+                            '${Constraints.baseURL + food.image}'),
                         fit: BoxFit.cover
                     )
                 ),
@@ -306,7 +312,10 @@ class FoodDetailsCard extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width - 190,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width - 190,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -326,16 +335,19 @@ class FoodDetailsCard extends StatelessWidget {
                             child: Text(
                               'Buy',
                               style: TextStyle(
-                                color: Colors.white
+                                  color: Colors.white
                               ),
                             ),
-                            onPressed: (AnimationController _controller) async{
+                            onPressed: (AnimationController _controller) async {
                               _controller.forward();
                               Connection _connection = Connection(context);
-                              var _response = await _connection.addToCart(food.id);
+                              var _response = await _connection.addToCart(
+                                  food.id);
                               BotToast.showText(
                                   text: _response['status'],
-                                  contentColor: _response['error'] ? Colors.red : Colors.green,
+                                  contentColor: _response['error']
+                                      ? Colors.red
+                                      : Colors.green,
                                   textStyle: TextStyle(
                                       color: Colors.white
                                   )
@@ -358,8 +370,10 @@ class FoodDetailsCard extends StatelessWidget {
 }
 
 class CartFoodCard extends StatefulWidget {
-  CartFoodCard({@required this.food});
+  CartFoodCard({@required this.food, @required this.cartId, @required this.notifyParent});
 
+  final Function notifyParent;
+  final int cartId;
   final Food food;
 
   @override
@@ -386,9 +400,9 @@ class _CartFoodCardState extends State<CartFoodCard> {
                     Icons.keyboard_arrow_up,
                     size: 30,
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     setState(() {
-                      if (item < 10){
+                      if (item < 10) {
                         item++;
                       }
                     });
@@ -407,7 +421,7 @@ class _CartFoodCardState extends State<CartFoodCard> {
                     Icons.keyboard_arrow_down,
                     size: 30,
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     setState(() {
                       if (item > 1)
                         item--;
@@ -416,14 +430,15 @@ class _CartFoodCardState extends State<CartFoodCard> {
                 ),
               ],
             ),
-            SizedBox( width: 5,),
+            SizedBox(width: 5,),
             Container(
               width: 80,
               height: 80,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(150),
                   image: DecorationImage(
-                      image: NetworkImage(Constraints.baseURL+widget.food.image),
+                      image: NetworkImage(
+                          Constraints.baseURL + widget.food.image),
                       fit: BoxFit.cover
                   )
               ),
@@ -451,26 +466,34 @@ class _CartFoodCardState extends State<CartFoodCard> {
                         color: Colors.yellow[800]
                     )
                 ),
-//                SizedBox(
-//                  height: 5,
-//                ),
-//                Text(
-//                    '${widget.food.time} Min to Ready'
-//                ),
               ],
             ),
             Spacer(),
-            Material(
-              elevation: 3,
-              borderRadius: BorderRadius.circular(50),
-              child: IconButton(
-                icon: Icon(
-                    Icons.close
-                ),
-                iconSize: 25,
-                onPressed: (){
-
+            Container(
+              width: 50,
+              height: 50,
+              child: ProgressButton(
+                color: Colors.white,
+                onPressed: (AnimationController _controller) async{
+                  _controller.forward();
+                  Connection _connection = Connection(context);
+                  var _response = await _connection.deleteFromCarts(widget.cartId);
+                  BotToast.showText(
+                      text: _response['status'],
+                    contentColor: _response['error'] ? Colors.red : Colors.green,
+                    textStyle: TextStyle(
+                      color: Colors.white
+                    )
+                  );
+                  widget.notifyParent(widget.cartId);
+                  _controller.reverse();
                 },
+                progressIndicatorColor: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(25),
+                child: Icon(
+                  Icons.close,
+                  size: 20,
+                ),
               ),
             )
           ],
