@@ -13,6 +13,7 @@ class Connection{
   BuildContext context;
   Connection(this.context);
 
+  // method for check base url
   Future<http.Response> getBaseConnection() async{
     try{
       http.Response response = await http.get(baseURL);
@@ -27,6 +28,7 @@ class Connection{
     }
   }
 
+  // Login user
   Future<dynamic> loginUser(String email, String password) async{
     try{
       http.Response response = await http.post(baseURL+'/login', body: {
@@ -43,6 +45,7 @@ class Connection{
     }
   }
 
+  // Register user
   Future<dynamic> registerUser(String email, String password, String address, String phone, String fullName) async{
     try{
       http.Response response = await http.post(baseURL+'/register', body: {
@@ -67,6 +70,7 @@ class Connection{
     }
   }
 
+  // get menus of restaurant
   Future<dynamic> getMenus() async{
     try{
       var token = await getAPIToken();
@@ -83,6 +87,7 @@ class Connection{
     }
   }
 
+  // get all foods from database
   Future<dynamic> getFoods() async{
     try{
       var token = await getAPIToken();
@@ -99,6 +104,7 @@ class Connection{
     }
   }
 
+  // add a food item into carts
   Future<dynamic> addToCart(int foodId) async{
     try {
       var token = await getAPIToken();
@@ -119,6 +125,26 @@ class Connection{
     }
   }
 
+  // get all carts of user
+  Future<dynamic> getCarts() async{
+    try{
+      var token = await getAPIToken();
+      var user_id = await getUserId();
+      http.Response _response = await http.post(baseURL+'/getAllCarts', body: {
+        'api_token': token,
+        'customer_id': "$user_id"
+      });
+      if (_response.statusCode == 200){
+        return jsonDecode(_response.body);
+      } else {
+        print(_response.statusCode);
+      }
+    } catch(e){
+      print("Connection error : "+e);
+    }
+  }
+
+  // get API token from sharedpreferences
   Future<String> getAPIToken() async{
     final SharedPreferences prefs = await _prefs;
     if (prefs.getString('api_token') != null){
@@ -127,6 +153,8 @@ class Connection{
       return null;
     }
   }
+
+  // get user id from sharedpreferences
   Future<int> getUserId() async{
     final SharedPreferences prefs = await _prefs;
     if (prefs.getInt('id') != null){

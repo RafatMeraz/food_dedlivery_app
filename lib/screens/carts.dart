@@ -2,23 +2,69 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fooddedliveryapp/models/cart.dart';
 import 'package:fooddedliveryapp/models/food.dart';
+import 'package:fooddedliveryapp/network/connection.dart';
 import 'package:fooddedliveryapp/screens/login.dart';
 import 'package:fooddedliveryapp/utils/reuseable_widget.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-class Carts extends StatelessWidget {
+class Carts extends StatefulWidget {
 
-  List<Food> _cartList = [
+  @override
+  _CartsState createState() => _CartsState();
+}
 
-  ];
+class _CartsState extends State<Carts> {
+  Connection _connection;
+  List<Cart> carts = [];
+  List<Cart> allCarts = [];
+  bool showProgress = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _connection = Connection(context);
+    getAllCarts();
+  }
+
+  getAllCarts() async{
+    setState(() {
+      showProgress = true;
+    });
+    carts.clear();
+    var _response = await _connection.getCarts();
+    print(_response);
+    for (int i=0; i < _response.length; i++){
+      print(_response[i]);
+      carts.add(Cart(
+        id: _response[i]['id'],
+        food: Food(
+            id: _response[i]['food']['id'],
+            name: _response[i]['food']['name'],
+            image: _response[i]['food']['image'],
+            description: _response[i]['food']['description'],
+            menuId: _response[i]['food']['menu_id'],
+            price: _response[i]['food']['price'],
+            time: _response[i]['food']['time']
+        ),
+        foodId: _response[i]['food_id'],
+        time: _response[i]['add_time'],
+      ));
+    }
+    setState(() {
+      allCarts = carts;
+      showProgress = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
 
     final cartsList = Column(
-      children: _cartList.map((f){
+      children: allCarts.map((f){
         return CartFoodCard(
-            food:f
+            food: f.food
         );
       }).toList()
     );
@@ -127,7 +173,7 @@ class Carts extends StatelessWidget {
       ),
     );
 
-    final cartsBody = _cartList.isEmpty ? Center(
+    final cartsBody = allCarts.isEmpty ? Center(
       child: Text(
         'Cart is Empty'
       ),
@@ -151,8 +197,11 @@ class Carts extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-          child: cartsBody
+      body: ModalProgressHUD(
+        inAsyncCall: showProgress,
+        child: SingleChildScrollView(
+            child: cartsBody
+        ),
       )
     );
   }

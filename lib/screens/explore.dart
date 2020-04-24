@@ -23,7 +23,6 @@ class _ExploreState extends State<Explore> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _connection = Connection(this.context);
     getFoods();

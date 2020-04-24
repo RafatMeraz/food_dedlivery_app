@@ -423,7 +423,7 @@ class _CartFoodCardState extends State<CartFoodCard> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(150),
                   image: DecorationImage(
-                      image: AssetImage('${widget.food.image}'),
+                      image: NetworkImage(Constraints.baseURL+widget.food.image),
                       fit: BoxFit.cover
                   )
               ),
