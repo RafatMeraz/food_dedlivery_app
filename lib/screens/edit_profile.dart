@@ -1,13 +1,33 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fooddedliveryapp/models/user.dart';
+import 'package:fooddedliveryapp/network/connection.dart';
 import 'package:fooddedliveryapp/utils/reuseable_widget.dart';
+import 'package:progress_indicator_button/progress_button.dart';
 
 class EditProfile extends StatefulWidget {
+  EditProfile({@required this.user, @required this.notifyChange});
+
+  final User user;
+  final Function notifyChange;
+
   @override
   _EditProfileState createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = widget.user.name;
+    phoneController.text = widget.user.phone;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +114,7 @@ class _EditProfileState extends State<EditProfile> {
                         TextField(
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: 'email@gmail.com',
+                            hintText: '${widget.user.email}',
                             enabled: false,
                           ),
                         ),
@@ -102,6 +122,7 @@ class _EditProfileState extends State<EditProfile> {
                           height: 10,
                         ),
                         TextField(
+                          controller: nameController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'User Name',
@@ -112,6 +133,7 @@ class _EditProfileState extends State<EditProfile> {
                           height: 10,
                         ),
                         TextField(
+                          controller: phoneController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Phone Number',
@@ -125,7 +147,37 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(
                   height: 20,
                 ),
-                RoundButton(labelText: 'Save', onTap: (){})
+                Container(
+                  width: MediaQuery.of(context).size.width-16,
+                  height: 50,
+                  margin: EdgeInsets.only(bottom: 8),
+                  child: ProgressButton(
+                    onPressed: (AnimationController _controller) async{
+                      _controller.forward();
+                      Connection _connection = Connection(context);
+                      var _response = await _connection.updateNamePhone(nameController.text, phoneController.text);
+                      BotToast.showText(
+                        text: _response['status'],
+                        contentColor: _response['error'] ? Colors.red : Colors.green,
+                        textStyle: TextStyle(
+                          color: Colors.white
+                        )
+                      );
+                      if (!_response['error']){
+                        Navigator.pop(context);
+                        widget.notifyChange();
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(30),
+                    child: Text(
+                        'Save',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),

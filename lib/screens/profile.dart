@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fooddedliveryapp/models/user.dart';
+import 'package:fooddedliveryapp/network/connection.dart';
 import 'package:fooddedliveryapp/screens/edit_profile.dart';
 import 'package:fooddedliveryapp/screens/login.dart';
 import 'package:fooddedliveryapp/utils/reuseable_widget.dart';
@@ -12,8 +14,34 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool appNotification = true;
-
   bool locationTracing = false;
+  Connection _connection;
+  User user = User();
+
+  @override
+  void initState() {
+    super.initState();
+    _connection = Connection(this.context);
+    getUserDetails();
+  }
+
+  getUserDetails() async{
+    var _response = await _connection.getUserDetails();
+    setState(() {
+      user = User(
+        id: _response['id'],
+        name: _response['name'],
+        email: _response['email'],
+        address: _response['address'],
+        phone: _response['phone'],
+        password: _response['password']
+      );
+    });
+  }
+
+  refreshUserDetails(){
+    getUserDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +109,7 @@ class _ProfileState extends State<Profile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Sassy Cassy',
+                          '${user.name}',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16
@@ -91,7 +119,7 @@ class _ProfileState extends State<Profile> {
                           height: 5,
                         ),
                         Text(
-                          'sassaycassy10@gmail.com',
+                          '${user.email}',
                           style: TextStyle(
                             color: Colors.black54
                           ),
@@ -100,7 +128,7 @@ class _ProfileState extends State<Profile> {
                           height: 5,
                         ),
                         Text(
-                          '+8801793785741',
+                          '${user.phone}',
                           style: TextStyle(
                             color: Colors.black54
                           ),
@@ -111,7 +139,10 @@ class _ProfileState extends State<Profile> {
                         BorderedButton(
                           onTap: (){
                             Navigator.push(context, MaterialPageRoute(
-                              builder: (BuildContext context)=> EditProfile()
+                              builder: (BuildContext context)=> EditProfile(
+                                user: user,
+                                notifyChange: refreshUserDetails(),
+                              )
                             ));
                           },
                           labelText: 'Edit',

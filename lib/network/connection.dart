@@ -162,6 +162,46 @@ class Connection{
     }
   }
 
+  // Edit user name phone
+  Future<dynamic> updateNamePhone(String name, String phone) async{
+    try{
+      var token = await getAPIToken();
+      var id = await getUserId();
+      http.Response _response = await http.post(baseURL+'/updateNamePhone', body: {
+        'api_token': token,
+        'id': "$id",
+        'name': "$name",
+        'phone': "$phone",
+      });
+      if (_response.statusCode == 200){
+        return jsonDecode(_response.body);
+      } else {
+        print(_response.statusCode);
+      }
+    } catch(e){
+      print("Connection error : "+e.toString());
+    }
+  }
+
+  // get User details
+  Future<dynamic> getUserDetails() async{
+    try{
+      var token = await getAPIToken();
+      var id = await getUserId();
+      http.Response _response = await http.post(baseURL+'/getUserDetails', body: {
+        'api_token': token,
+        'id': "$id"
+      });
+      if (_response.statusCode == 200){
+        return jsonDecode(_response.body);
+      } else {
+        print(_response.statusCode);
+      }
+    } catch(e){
+      print("Connection error : "+e);
+    }
+  }
+
   // get API token from sharedpreferences
   Future<String> getAPIToken() async{
     final SharedPreferences prefs = await _prefs;
