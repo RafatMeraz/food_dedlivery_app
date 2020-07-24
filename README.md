@@ -16,3 +16,8 @@ A Flutter application from which users can visites menus and purchase foods from
 ## Tachonology
     - Flutter (Mobile framework)
     - Laravel Lumen (REST API microservice)
+    - MySQL
+
+## Set Up
+
+If you are insterested to use this project for personal use then pull it & execute the command <code>flutter pub get</code>. Then you are ready to go!
